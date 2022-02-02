@@ -1,10 +1,13 @@
 import "./MovieListing.scss";
 import { useSelector } from "react-redux";
-import { getAllMovies } from "../../features/movies/movieSlice";
+import { getAllMovies, getAllSeries } from "../../features/movies/movieSlice";
 import MovieCard from "../MovieCard/MovieCard";
 const MovieListing = () => {
   const movies = useSelector(getAllMovies);
+  const series = useSelector(getAllSeries);
+  // console.log(movies);
   let renderMovies = "";
+  let renderSeries = "";
 
   renderMovies =
     movies.Response === "True" ? (
@@ -17,16 +20,27 @@ const MovieListing = () => {
       </div>
     );
 
+  renderSeries =
+    series.Response === "True" ? (
+      series.Search.map((movie, index) => {
+        return <MovieCard key={index} data={movie} />;
+      })
+    ) : (
+      <div className="series-error">
+        <h3>{series.Error}</h3>
+      </div>
+    );
+
   return (
     <div className="movie-wrapper">
       <div className="movie-list">
         <h2>Movies</h2>
         <div className="movie-container">{renderMovies}</div>
       </div>
-      {/* <div className="show-list">
+      <div className="show-list">
         <h2>Shows</h2>
-        <div className="movie-container">{renderShows}</div>
-      </div> */}
+        <div className="movie-container">{renderSeries}</div>
+      </div>
     </div>
   );
 };
